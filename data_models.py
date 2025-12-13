@@ -42,7 +42,7 @@ class DownloadOutcome:
 @dataclass(frozen=True,slots=True)
 class ProgressEvent:
     item_id: str
-    phase: str
+    phase: str # "start" | "downloading" | "finished"
     bytes_done: int | None
     bytes_total: int | None
 
