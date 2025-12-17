@@ -1,5 +1,5 @@
-from data_models import Album, DownloadRequest, Track
 from pathlib import Path
+from .data_models import Album, DownloadRequest, Track
 
 def sanitize_filename(text: str) -> str:
     out: list[str] = []

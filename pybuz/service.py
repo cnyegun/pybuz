@@ -1,10 +1,10 @@
 from typing import Callable
 
 from pathlib import Path
-from data_models import DownloadRequest, ProgressEvent, DownloadOutcome, Track
-from downloader import HttpDownloader
-from paths import album_dir, track_final_path, temp_path
-from qobuz_client import QobuzClient
+from .data_models import DownloadRequest, ProgressEvent, DownloadOutcome, Track
+from .downloader import HttpDownloader
+from .paths import album_dir, track_final_path, temp_path
+from .qobuz_client import QobuzClient
 import os
 
 

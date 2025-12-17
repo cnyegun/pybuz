@@ -2,7 +2,7 @@ from typing import Callable
 from requests import Session
 from pathlib import Path
 
-from data_models import ProgressEvent
+from .data_models import ProgressEvent
 
 class HttpDownloader:
     def __init__(self, session: Session | None = None):
