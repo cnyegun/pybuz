@@ -1,4 +1,4 @@
-from .data_models import Album, DownloadRequest, Track
+from data_models import Album, DownloadRequest, Track
 from pathlib import Path
 
 def sanitize_filename(text: str) -> str:

@@ -28,15 +28,7 @@ class HttpDownloader:
                     file.write(chunk)
                     if progress_cb is not None and (byte_count - last_reported) >= report_every:
                         last_reported = byte_count
-                        progress_cb(ProgressEvent(
-                            item_id,
-                            "downloading",
-                            byte_count,
-                            None))
+                        progress_cb(ProgressEvent(item_id, "downloading", byte_count, None))
         if progress_cb is not None:
-            progress_cb(ProgressEvent(
-                item_id,
-                "finished",
-                byte_count,
-                None))
+            progress_cb(ProgressEvent(item_id, "finished", byte_count, None))
         return byte_count
