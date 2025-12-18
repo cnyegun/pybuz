@@ -3,14 +3,15 @@
 Minimalistic python library for downloading high-quality music from Qobuz.
 
 ## Installation
-
 ```bash
+git clone https://github.com/cnyegun/pybuz/
+pip install -e .
 ```
 
 ## Usage
 
 ```python
-from qobuz import QobuzClient, DownloadService, qualities
+from pybuz import QobuzClient, DownloadService, qualities
 
 client = QobuzClient(user_id="your_user_id", auth_token="your_auth_token")
 service = DownloadService(client)
@@ -26,6 +27,8 @@ outcomes = service.download_album(
 ## Quality Options
 
 ```python
+from pybuz import qualities
+
 qualities.MP3_320    # MP3 320kbps
 qualities.CD_QUALITY # FLAC 16-bit/44.1kHz
 qualities.HIRES      # FLAC 24-bit ≤96kHz
