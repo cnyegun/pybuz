@@ -1,12 +1,11 @@
 from typing import Callable
-
+import os
 from pathlib import Path
-from .data_models import DownloadRequest, ProgressEvent, DownloadOutcome, Track
+
+from .data_models import DownloadRequest, ProgressEvent, DownloadOutcome, Track, Quality
 from .downloader import HttpDownloader
 from .paths import album_dir, track_final_path, temp_path
 from .qobuz_client import QobuzClient
-import os
-
 
 class DownloadService:
     """
@@ -15,24 +14,31 @@ class DownloadService:
     - download to a temp file (.part) and atomically move into place
     - translate exceptions into DownloadOutcome entries
     """
-    def __init__(self, client: QobuzClient, downloader: HttpDownloader):
+    def __init__(self, client: QobuzClient):
         self.client = client
-        self.downloader = downloader
+        self.downloader = HttpDownloader(client.session)
 
     def download_album(
         self,
         album_id: str,
-        req: DownloadRequest,
+        dest_dir: str,
+        quality: Quality,
+        overwrite: bool = False,
         progress_cb: Callable[[ProgressEvent], None] | None = None,
     ) -> list[DownloadOutcome]:
+        dl_request = DownloadRequest(
+            dest_dir=Path(dest_dir),
+            quality=quality,
+            overwrite=overwrite
+        )
         if progress_cb is not None:
-            progress_cb(ProgressEvent(album_id, "resolving", None, None))
+            progress_cb(ProgressEvent("resolving", None, None, None, None))
 
         # Get album info from Qobuz
         album = self.client.get_album(album_id)
 
         # Create album folder
-        album_path = album_dir(album, req)
+        album_path = album_dir(album, dl_request)
         album_path.mkdir(parents=True, exist_ok=True)
 
         # Download each track
@@ -43,7 +49,7 @@ class DownloadService:
                 track=track,
                 index=index,
                 album_path=album_path,
-                req=req,
+                req=dl_request,
                 progress_cb=progress_cb
             )
             outcomes.append(outcome)
@@ -80,11 +86,14 @@ class DownloadService:
             self.downloader.download(
                 url=resolved.url,
                 dest_tmp=temp_file,
-                item_id=track.track_id,
+                track_name=track.title,
+                track_number=track.track_number,
                 progress_cb=progress_cb
             )
 
+            # Change the file extension
             os.replace(temp_file, final_path)
+
 
             return DownloadOutcome(
                 item_id=track.track_id,

@@ -1,7 +1,9 @@
 from pathlib import Path
 from .data_models import Album, DownloadRequest, Track
+import re
 
 def sanitize_filename(text: str) -> str:
+    text = re.sub(r'\s+', ' ', text).strip()
     out: list[str] = []
     illegals_ch = {'|', '/', '\\', ':', '*', '?', '\"', '<', '>'}
     for ch in text:
