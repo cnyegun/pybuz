@@ -8,7 +8,7 @@ class Track:
     track_number: int
     title: str
     artist: str
-    release_date: datetime
+    release_date: datetime | None
 
 @dataclass(frozen=True, slots=True)
 class Album:
